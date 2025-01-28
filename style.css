@@ -1,6 +1,6 @@
 body {
-    min-height: 100vh;
-    min-width: 100vw;
+    /* min-height: 100vh;
+    min-width: 100vw;*/
     /*background-color: #12181f;*/
     background-image: url("img/Masion_Background.webp");
     background-position: center;
@@ -10,6 +10,68 @@ body {
     background-size: cover;
     /* Resize the background image to cover the entire container */
     color: black;
-    --card_width: 8vw;
+    --card_width: 9vw;
     /*This varaible can be used later; but it stands for 8% of the Visinble Width */
+}
+
+.Suspect_Grid {
+    display: grid;
+    /* Make this a grid */
+    /* justify-content: center;*/
+
+    grid-gap: 6px;
+    grid-template-columns: repeat(7, var(--card_width));
+    grid-template-rows: repeat(3, calc(var(--card_width) / 2.5 * 3.5));
+}
+
+.card {
+    height: calc(var(--card_width) / 2.5 * 3.5);
+    width: var(--card_width);
+    /*border-radius: 10px;
+    background-color: white;*/
+    position: relative;
+    transform-style: preserve-3d;
+    transition: all 0.5s ease-in-out;
+}
+
+
+.front,
+.overlay {
+    backface-visibility: hidden;
+    position: absolute;
+    border-radius: 10px;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+}
+
+.overlay {
+    pointer-events: none;
+}
+
+.status-image {
+    width: 50%;
+    height: 50%;
+    display: block;
+
+}
+
+.hidden {
+    transition: transform 0.3s ease;
+    backface-visibility: hidden;
+    transform: rotateY(90deg);
+
+}
+
+.front-image {
+    width: var(--card_width);
+    transition: transform 0.3s ease;
+    /* Smooth transition */
+
+}
+
+.front-image:hover {
+    transform: scale(1.5);
+    /* Increase size by 20% */
 }
