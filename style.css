@@ -1,0 +1,15 @@
+body {
+    min-height: 100vh;
+    min-width: 100vw;
+    /*background-color: #12181f;*/
+    background-image: url("img/Masion_Background.webp");
+    background-position: center;
+    /* Center the image */
+    background-repeat: no-repeat;
+    /* Do not repeat the image */
+    background-size: cover;
+    /* Resize the background image to cover the entire container */
+    color: black;
+    --card_width: 8vw;
+    /*This varaible can be used later; but it stands for 8% of the Visinble Width */
+}
