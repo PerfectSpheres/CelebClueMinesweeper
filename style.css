@@ -14,6 +14,13 @@ body {
     /*This varaible can be used later; but it stands for 8% of the Visinble Width */
 }
 
+
+.TopContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
 .Suspect_Grid {
     display: grid;
     /* Make this a grid */
@@ -48,13 +55,14 @@ body {
 
 .overlay {
     pointer-events: none;
+    display: flex;
+    justify-content: center;
 }
 
 .status-image {
-    width: 50%;
-    height: 50%;
-    display: block;
-
+    width: 100%;
+    object-fit: contain;
+    height: auto;
 }
 
 .hidden {

@@ -2,19 +2,23 @@ const gridContainer = document.querySelector(".Suspect_Grid");
 let cards = [];
 
 let icon = {
-    "Unkown": "fingerprint-scan.png",
-    "Harem": "Lips.png",
-    "Innocent": "forbidden.png",
+    "Unkown": "lipstick_heart.png",
+    "Harem": "cum_splatter.png",
+    //"Innocent": "forbidden.png",
+    "Innocent": "Innocent.png",
     "Murderer": "Skull.png"
 };
 
-var n = 19;
-let arr = [...Array(n)].map((item, index) => index + 1);
-//shuffle(arr);
+var n = 21;
+let arr = [...Array(n)].map((item, index) => index);
+
 let status_array = Array(n).fill("Unkown");
 let MurdererIndex = Math.floor(Math.random() * n);
 status_array[MurdererIndex] = "Murderer";
+MurdererIndex = Math.floor(Math.random() * n);
+status_array[MurdererIndex] = "Murderer";
 
+shuffle(arr)
 fetch("./data/suspects.json")
     .then((res) => res.json())
     .then((data) => {
@@ -59,11 +63,11 @@ function selectCard() {
     console.log(`I was clicked ${this} with index ${Num}`);
     let StatusIcon = document.getElementById(`StatusDisplay${Num}`);
     //Can't click on Cleared one.....
-    if (status_array[Num - 1] == "Harem" || status_array[Num - 1] == "Innocent") {
+    if (status_array[Num] == "Harem" || status_array[Num] == "Innocent") {
         return;
-    } else if (status_array[Num - 1] == "Unkown") {
+    } else if (status_array[Num] == "Unkown") {
 
-        status_array[Num - 1] = "Harem"
+        status_array[Num] = "Harem"
     } else {
         //CHecking murder Index is better but this is more clear
         //OU ARE THE MURDERER GAME OVER..
@@ -71,21 +75,30 @@ function selectCard() {
     }
 
     StatusIcon.classList.toggle('hidden');
-    StatusIcon.src = `img/Overlay/${icon[status_array[Num - 1]]}`;
+    StatusIcon.src = `img/Overlay/${icon[status_array[Num]]}`;
 
-    let Innocents = findUnkown(2);
+    let Innocents = findtag(2, "Unkown");
+
     for (let key of Innocents) {
-        StatusIcon = document.getElementById(`StatusDisplay${key + 1}`);
+        StatusIcon = document.getElementById(`StatusDisplay${key}`);
         StatusIcon.classList.toggle('hidden');
         status_array[key] = "Innocent"
         StatusIcon.src = `img/Overlay/${icon[status_array[key]]}`; //Should beInnocent
     }
+    if (Innocents.length < 2) {
+        let Killers = findtag(2, "Murderer");
+        for (let key of Killers) {
+            StatusIcon = document.getElementById(`StatusDisplay${key}`);
+            StatusIcon.classList.toggle('hidden');
+            StatusIcon.src = `img/Overlay/${icon[status_array[key]]}`; //Should beInnocent
+        }
+    }
 }
 
-function findUnkown(number) {
+function findtag(number, tag) {
     let innocents = [];
     for (x = 0; x < status_array.length; x++) {
-        if (status_array[x] == "Unkown") {
+        if (status_array[x] == tag) {
             innocents.push(x);
         }
     }
