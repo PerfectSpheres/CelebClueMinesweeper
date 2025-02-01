@@ -1,4 +1,4 @@
-const gridContainer = document.querySelector(".Suspect_Grid");
+let gridContainer = null;//document.querySelector(".Suspect_Grid");
 let cards = [];
 let dragCard = null;
 let icon = {
@@ -36,6 +36,10 @@ for (y = 0; y < total_killers; y++) {
 shuffle(arr);
 
 function StartGame() {
+    const gameGrid = document.createElement("div");
+    gameGrid.classList.add("Suspect_Grid");
+    gridContainer = gameGrid;
+    document.querySelector(".Intro").replaceChildren(gameGrid);//DELETE ALL CHILDREN
     generateCards();
     //Update Count
     updateCount();
@@ -169,9 +173,11 @@ function winCheck() {
             StatusIcon.classList.remove('hidden');
         } else {
             //DIE
+            let cardElement = document.getElementById(`CardSlot${killer}`);
+            cardElement.classList.remove('flipped');
             let StatusIcon = document.getElementById(`StatusDisplay${killer}`);
             StatusIcon.src = `img/Overlay/${icon["GameOver"]}`; //Should Jail
-            StatusIcon.classList.remove('flipped');
+
             StatusIcon.classList.remove('hidden');
         }
 

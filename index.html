@@ -11,18 +11,64 @@
 <body>
     <!--<h1>Clue Mystery Game: Draft Your harem, watch out for the Murder </h1>-->
     <div class="TopContainer">
-        <div class="Suspect_Grid"></div>
+        <div class="Intro" id="GameArea">
+            <div>
+                <h2>“Tits Out – A CYOA mystery game”</h2>
+                <img src='img/glass-onion-daniel-craig-as-benoit-blanc-in-lockdown.avif'
+                    style='float: right; width: 65vh; margin: 10px;' />
+                <p> The unexpected death of your estranged eccentric uncle Benoit Blanc threw your life into an
+                    whirlwind. You received a letter inviting you to his sprawling estate for the opening of his vault
+                    and reading of his will in 7 days, along with all other inheritors. An additional secret message
+                    addressed to you the last living male relative, “Everything is not what it seems; I’m close to my
+                    completing my magnun opus, but I see dangers all around me. If you are reading finish your uncle's
+                    work and avoid falling prey as well.
+                </p>
+                <p> Arriving at the mansion, you were astounded by the beautiful women surrounding you. You knew that
+                    your uncle had always enjoyed the company of busty, gorgeous women, but you hadn’t realized he was
+                    able to keep this much of it out of the net. Now, you must find the true killer among them within 7
+                    days. The clock is ticking!</p>
+                <h2>"Rules – for Tits Out"</h2>
+                <ol>
+                    <li> There are 21 suspects, but only one of them is the killer.
+                    <li> You have 7 days (or actions) to find the killer and solve the mystery.
+                    </li>
+                    <li> Each night, you can seduce one of the ladies by selecting their picture. When you do, you'll
+                        reveal two other characters as innocent - but never any that you've already seduced.
+                    </li>
+                    <li> Once you think you've identified the killer, drag them to Sophie the Cop to make an arrest and
+                        claim your harem.
+                    </li>
+                    <li>If you haven't found the killer by the end of the 7 days, beware: they may have seduced you
+                        instead! In this case, you'll need to choose which members of your harem to accuse by dragging
+                        them to Sophie the Cop. You can select multiple suspects to turn in, but be warned: once your
+                        choices are locked in, it's too late to change your mind. Will you correctly identify the
+                        killer, or will you become their next victim? </li>
+                </ol>
+
+            </div>
+
+
+        </div>
+
         <div class="Instructions">
             <div>
                 <!-- <p> Bunch of text goes here to explaind</p> -->
             </div>
             <div class="StatBar">
-                <img class="icon" src="img/Overlay/magnifier.png"><span class="counters" id="count_suspects">21</span>
-                <img class="icon" src="img/Overlay/Harem.png"><span class="counters" id="count_harem">0</span>
-                <img class="icon" src="img/Overlay/handcuffs.png"><span class="counters" id="count_arrested">0</span>
-                <img class="icon" src="img/Overlay/Killers.png"><span class="counters" id="count_murderers">2</span>
+                <img class="icon" src="img/Overlay/magnifier.png">
+                <img class="icon" src="img/Overlay/Harem.png">
+                <img class="icon" src="img/Overlay/handcuffs.png">
+                <img class="icon" src="img/Overlay/Killers.png">
                 <!--<input type="image" src="img/images.png" />
                 <button><img src="img/images.png"></button>-->
+            </div>
+            <div class="StatBar">
+                <span class="counters icon" id="count_suspects">21</span>
+                <span class="counters icon" id="count_harem">0</span>
+
+                <span class="counters icon" id="count_arrested">0</span>
+
+                <span class="counters icon" id="count_murderers">2</span>
             </div>
             <div class="card dropzone" id="Jail" ondragover="allowDrop(event)" ondrop="drop(event)">
                 <div class="front">
@@ -33,7 +79,8 @@
                 </div>
             </div>
             <div class="StatBar"> <button type="button" onclick="StartGame()">StartGame</button>
-                <button type="button" onclick="winCheck()">Submit Choice</button>
+                <button type="button" onclick="winCheck()">Book'em<br>Sophie</button>
+                <button type="button" onclick="newGame()">NewGame</button>
             </div>
         </div>
         <!-- 
