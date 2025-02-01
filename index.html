@@ -9,19 +9,40 @@
 </head>
 
 <body>
-    <h1>Clue Mystery Game: Draft Your harem, watch out for the Murder </h1>
+    <!--<h1>Clue Mystery Game: Draft Your harem, watch out for the Murder </h1>-->
     <div class="TopContainer">
         <div class="Suspect_Grid"></div>
-        <div class="Video">
-            <!--<iframe src='https://www.redgifs.com/ifr/bustlingcoarsedrake' frameborder='1' scrolling='no' width='1470'
-                height='1080'></iframe> -->
+        <div class="Instructions">
+            <div>
+                <!-- <p> Bunch of text goes here to explaind</p> -->
+            </div>
+            <div class="StatBar">
+                <img class="icon" src="img/Overlay/magnifier.png"><span class="counters" id="count_suspects">21</span>
+                <img class="icon" src="img/Overlay/Harem.png"><span class="counters" id="count_harem">0</span>
+                <img class="icon" src="img/Overlay/handcuffs.png"><span class="counters" id="count_arrested">0</span>
+                <img class="icon" src="img/Overlay/Killers.png"><span class="counters" id="count_murderers">2</span>
+                <!--<input type="image" src="img/images.png" />
+                <button><img src="img/images.png"></button>-->
+            </div>
+            <div class="card dropzone" id="Jail" ondragover="allowDrop(event)" ondrop="drop(event)">
+                <div class="front">
+                    <img class="front-image" src="img/CharCards/sophie_dee_17.jpg">
+                </div>
+                <div class="back">
+                    <img class="front-image" src="img/CharCards/sophie_dee_15.jpg">
+                </div>
+            </div>
+            <div class="StatBar"> <button type="button" onclick="StartGame()">StartGame</button>
+                <button type="button" onclick="winCheck()">Submit Choice</button>
+            </div>
+        </div>
+        <!-- 
             <video controls="" autoplay="" name="media">
                 <source
                     src="https://video.twimg.com/ext_tw_video/1626913961814921217/pu/vid/480x1010/wFX9-pt0UKF5HvHX.mp4?tag=12"
                     type="video/mp4">
             </video>
-
-        </div>
+        -->
     </div>
     <script src="index.js"></script>
 </body>
