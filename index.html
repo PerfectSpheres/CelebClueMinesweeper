@@ -29,20 +29,21 @@
                     days. The clock is ticking!</p>
                 <h2>"Rules – for Tits Out"</h2>
                 <ol>
-                    <li> There are 21 suspects, but only one of them is the killer.
-                    <li> You have 7 days (or actions) to find the killer and solve the mystery.
+                    <li> There are 21 suspects, but only <button type="button"
+                            onclick="total_killers=1;updateKiller()">one[Easy]</button>/
+                        <button type="button" onclick="total_killers=2;updateKiller()">two[Hard]</button> of them
+                        is the killer.
+                    <li> You have 7 days (actions) to find the killer and solve the mystery.
                     </li>
-                    <li> Each night, you can seduce one of the ladies by selecting their picture. When you do, you'll
-                        reveal two other characters as innocent - but never any that you've already seduced.
+                    <li> Each night, you can seduce one of the ladies by clicking their picture. When you do, you'll
+                        find evidence exhonorating two other characters - but never any that you've already seduced.
                     </li>
-                    <li> Once you think you've identified the killer, drag them to Sophie the Cop to make an arrest and
-                        claim your harem.
+                    <li> After 7 nights, catch the killer(s): drag as many laddies to Sophie the Cop to make an arrest,
+                        then <b>Book'em </b>
+                        claim your inheritance.
                     </li>
-                    <li>If you haven't found the killer by the end of the 7 days, beware: they may have seduced you
-                        instead! In this case, you'll need to choose which members of your harem to accuse by dragging
-                        them to Sophie the Cop. You can select multiple suspects to turn in, but be warned: once your
-                        choices are locked in, it's too late to change your mind. Will you correctly identify the
-                        killer, or will you become their next victim? </li>
+                    <li>You can turn in as many of your harem members as you like increasing your odds of catching the
+                        killer, but then you'll lose out on their share of the inheritance. </li>
                 </ol>
 
             </div>
@@ -78,9 +79,11 @@
                     <img class="front-image" src="img/CharCards/sophie_dee_15.jpg">
                 </div>
             </div>
-            <div class="StatBar"> <button type="button" onclick="StartGame()">StartGame</button>
-                <button type="button" onclick="winCheck()">Book'em<br>Sophie</button>
-                <button type="button" onclick="newGame()">NewGame</button>
+            <div class="VertBar">
+                <button id="StartButton" type="button" onclick="StartGame()">Start Game</button>
+                <button id="WinButton" disabled type="button" onclick="winCheck()">Book'em<br>Sophie</button>
+                <button id="RedoButton" disabled type="button" onclick="NewRound()">Try Again?</button>
+                <button id="EndButton" disabled type="button" onclick="ClaimRewards()">Claim Rewards</button>
             </div>
         </div>
         <!-- 
@@ -91,6 +94,7 @@
             </video>
         -->
     </div>
+    <div class="Reward_Grid"></div>
     <script src="index.js"></script>
 </body>
 

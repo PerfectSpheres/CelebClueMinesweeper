@@ -13,36 +13,56 @@ let icon = {
     "GameOver": "Killers.png"
 };
 
+
+
+//Doesn't Change...
 var total_chars = 21;
 let total_killers = 2;
-
-var status_array = Array(total_chars).fill("Suspects");
+var Suspect_count = Harem_count = Jail_count = 0;
+var status_array = [];
 
 //Make List of Suspects of length N
-var arr = [...Array(total_chars)].map((item, index) => index);
+var arr = [];
 //New Array will be destroyed- to pick killers
-let newArray = arr.slice();//COPY BY VALUE....
+let newArray = [];
 
 let killer_array = []
 
-shuffle(newArray)
-for (y = 0; y < total_killers; y++) {
-    let MurdererIndex = newArray.pop()
-    status_array[MurdererIndex] = "Murderer";
-    killer_array.push(MurdererIndex)
-}
+function NewGame() {
+    gridContainer.replaceChildren();//Clear all children
+    Suspect_count = Harem_count = Jail_count = 0;
+    status_array = Array(total_chars).fill("Suspects");
+    arr = [...Array(total_chars)].map((item, index) => index);
+    killer_array.length = 0;
+    newArray = arr.slice();//COPY BY VALUE....
+    shuffle(newArray)
+    for (y = 0; y < total_killers; y++) {
+        let MurdererIndex = newArray.pop()
+        status_array[MurdererIndex] = "Murderer";
+        killer_array.push(MurdererIndex)
+    }
 
-//Shuffle Order of suspects
-shuffle(arr);
+    //Shuffle Order of suspects
+    shuffle(arr);
+}
 
 function StartGame() {
     const gameGrid = document.createElement("div");
     gameGrid.classList.add("Suspect_Grid");
     gridContainer = gameGrid;
     document.querySelector(".Intro").replaceChildren(gameGrid);//DELETE ALL CHILDREN
+    document.getElementById("StartButton").disabled = true;
+    document.getElementById("WinButton").disabled = false;
+    document.getElementById("RedoButton").disabled = false;
+    NewRound();
+}
+
+function NewRound() {
+    NewGame(); //Must have gridContainer asigned first
     generateCards();
     //Update Count
     updateCount();
+    document.getElementById("EndButton").disabled = true;
 }
 
 /* FETCH DATA COMMENTED UNTILL I MAKE DATA BASE
@@ -138,11 +158,11 @@ function jailChar(cardContainer) {
 
 function updateCount() {
     //Suspect Count is the number of Suspects + Murderers
-    let Suspect_count = status_array.filter(x => x === "Suspects").length + status_array.filter(x => x === "Murderer").length;
+    Suspect_count = status_array.filter(x => x === "Suspects").length + status_array.filter(x => x === "Murderer").length;
     // # of ones you fucked Guilty or Not
-    let Harem_count = status_array.filter(x => x === "Fucked").length;
+    Harem_count = status_array.filter(x => x === "Fucked").length;
     //Total # in Jail Guilty or not
-    let Jail_count = status_array.filter(x => x === "Arrested").length;
+    Jail_count = status_array.filter(x => x === "Arrested").length;
 
     const suspect_counter = document.getElementById("count_suspects"); //+ Murderers
     suspect_counter.textContent = Suspect_count;
@@ -150,8 +170,10 @@ function updateCount() {
     Harem_counter.textContent = Harem_count;
     const Jail_counter = document.getElementById("count_arrested"); //+ Murderers
     Jail_counter.textContent = Jail_count;
-
-
+}
+function updateKiller() {
+    const Murder_counter = document.getElementById("count_murderers"); //+ Murderers
+    Murder_counter.textContent = total_killers;
 }
 
 function winCheck() {
@@ -184,11 +206,47 @@ function winCheck() {
     }
 
     if (Win_Check == 0) {
-
+        document.getElementById("EndButton").disabled = false;
         alert("You Won")
+
     } else {
         alert("You Lost")
     }
+}
+
+function ClaimRewards() {
+    const Sophie = document.getElementById("Jail");
+    Sophie.classList.add('flipped');
+    const rewardContainer = document.querySelector(".Reward_Grid");
+    rewardContainer.replaceChildren()
+    generateRewardCards()
+
+}
+
+function generateRewardCards() {
+    const rewardContainer = document.querySelector(".Reward_Grid");
+    //gridContainer.removeChild()
+    for (x = 0; x < 6; x++) {
+        //3 ITEMS
+        //FRONT IMAGE
+        //BACK IMAGE
+        //OVERALY //STart everyone as innocent
+        const cardElement = document.createElement("div");
+        cardElement.classList.add("card_H");
+        cardElement.setAttribute("id", `RewardSlot${x}`)
+        cardElement.setAttribute("data-num", `${x}`);
+        cardElement.draggable = false
+        cardElement.innerHTML = `
+                <div >
+                  <img  class="front-image" src="img/RewardCards/Reward${x}.jpg" />
+                </div>
+              `;
+        rewardContainer.appendChild(cardElement);
+        //cardElement.addEventListener("click", clickSlotBetter);
+        //cardElement.addEventListener("dragstart", dragStart, false);
+
+    }
+
 }
 
 function clickSlotBetter() {

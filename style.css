@@ -11,6 +11,7 @@ body {
     /* Resize the background image to cover the entire container */
     color: black;
     --card_width: 11vw;
+    --card_width_horizontal: 22vw;
     /*This varaible can be used later; but it stands for 8% of the Visinble Width */
 }
 
@@ -23,9 +24,20 @@ body {
 
 .Intro {
     width: 77vw;
-    font-size: 3.2vh;
-    backdrop-filter: blur(3px);
+    font-size: 2.5vh;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    /*backdrop-filter: blur(3px);*/
+    background-color: #F5F2E8;
+    text-align: justify;
 
+
+}
+
+p,
+h2,
+li {
+    margin-left: 8px;
+    margin-right: 8px;
 }
 
 .Suspect_Grid {
@@ -38,6 +50,19 @@ body {
     grid-template-rows: repeat(3, calc(var(--card_width) / 2.5 * 3.5));
 }
 
+.Reward_Grid {
+    display: grid;
+    /* Make this a grid */
+    /* justify-content: center;*/
+    grid-gap: 6px;
+    grid-template-columns: repeat(3, var(--card_width_horizontal));
+    grid-template-rows: repeat(2, calc(var(--card_width_horizontal)/3.5*2.5));
+}
+
+.supper_hidden {
+    display: none;
+}
+
 .card {
     height: calc(var(--card_width) / 2.5 * 3.5);
     width: var(--card_width);
@@ -48,6 +73,15 @@ body {
     transition: all 0.5s ease-in-out;
 }
 
+.card_H {
+    width: var(--card_width_horizontal);
+    height: calc(var(--card_width_horizontal)/3.5*2.5);
+    /*border-radius: 10px;
+    background-color: white;*/
+    position: relative;
+    transform-style: preserve-3d;
+    transition: all 0.5s ease-in-out;
+}
 
 .front,
 .back,
@@ -91,7 +125,7 @@ div.escaped .front {
 }
 
 .front-image {
-    width: var(--card_width);
+    /*width: var(--card_width);*/
     transition: transform 0.3s ease;
     /* Smooth transition */
     max-width: 100%;
@@ -112,6 +146,13 @@ div.escaped .front {
 .StatBar {
     display: flex;
     flex-direction: row;
+    flex-wrap: nowrap;
+    position: relative;
+}
+
+.VertBar {
+    display: flex;
+    flex-direction: column;
     flex-wrap: nowrap;
     position: relative;
 }
