@@ -56,7 +56,15 @@ li {
     /* justify-content: center;*/
     grid-gap: 6px;
     grid-template-columns: repeat(3, var(--card_width_horizontal));
-    grid-template-rows: repeat(2, calc(var(--card_width_horizontal)/3.5*2.5));
+    grid-template-rows: auto;
+    /*grid-template-rows: 10vh repeat(2, calc(var(--card_width_horizontal)/3.5*2.5));*/
+}
+
+.Reward_Instructions {
+    grid-column: span 3;
+    display: flex;
+    justify-content: center;
+
 }
 
 .supper_hidden {
@@ -109,6 +117,7 @@ div.escaped .front {
     pointer-events: none;
     display: flex;
     justify-content: center;
+    backface-visibility: visible;
 }
 
 .status-image {
@@ -120,7 +129,8 @@ div.escaped .front {
 .hidden {
     transition: transform 0.3s ease;
     backface-visibility: hidden;
-    transform: rotateY(90deg);
+    /*transform: rotateY(90deg);*/
+    display: none;
 
 }
 
@@ -133,8 +143,9 @@ div.escaped .front {
 
 }
 
-.front-image:hover {
+.card:hover {
     transform: scale(1.5);
+    z-index: 10;
     /* Increase size by 20% */
 }
 
@@ -181,4 +192,14 @@ button {
     border-radius: 10px;
     padding: 10px;
     display: inline-block;
+}
+
+p.distance {
+    width: 100%;
+    height: 100%;
+    font-size: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transform: rotateY(-180deg);
 }

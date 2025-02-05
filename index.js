@@ -17,35 +17,51 @@ let icon = {
 
 //Doesn't Change...
 var total_chars = 21;
+let num_cols = 7;
+
 let total_killers = 2;
-var Suspect_count = Harem_count = Jail_count = 0;
-var status_array = [];
+var Search_count = 7;
+var Harem_count = Jail_count = 0;
 
-//Make List of Suspects of length N
-var arr = [];
-//New Array will be destroyed- to pick killers
-let newArray = [];
 
-let killer_array = []
+//Screen Ordering gets shuffled
+var DisplayOrder = [];
+var status_array = []; //
+let killer_array = []; //
+let Jail_array = [];//
 
+//FIXED -remove comment
 function NewGame() {
     gridContainer.replaceChildren();//Clear all children
-    Suspect_count = Harem_count = Jail_count = 0;
-    status_array = Array(total_chars).fill("Suspects");
-    arr = [...Array(total_chars)].map((item, index) => index);
+    Search_count = 7;
+    Harem_count = Jail_count = 0;
+
+    //status_array = Array(total_chars).fill("Suspects");
+    status_array = Array(total_chars).fill(0);
+    DisplayOrder = [...Array(total_chars)].map((item, index) => index);
     killer_array.length = 0;
-    newArray = arr.slice();//COPY BY VALUE....
-    shuffle(newArray)
-    for (y = 0; y < total_killers; y++) {
-        let MurdererIndex = newArray.pop()
-        status_array[MurdererIndex] = "Murderer";
-        killer_array.push(MurdererIndex)
+    Jail_array.length = 0;
+    while (killer_array.length < total_killers) {
+        //Pick an Entry
+        let firstPick = Math.floor(Math.random() * total_chars);
+        let tmp = killer_array.findIndex((x) => x === firstPick);
+        //If not found: -1
+        if (tmp == -1) {
+            killer_array.push(firstPick);
+
+        }
+
     }
-
     //Shuffle Order of suspects
-    shuffle(arr);
-}
+    shuffle(DisplayOrder);
+    //Populate STatus Array with Length Calc
+    status_array = status_array.map((x, idx) => Math.min(calc_distance(idx, killer_array[0], 7), calc_distance(idx, killer_array[1], 7)));
+    //Calculate distance based on display order
+    //status_array = status_array.map((x, idx) => Math.min(calc_distance(idx, killer_array[0], 7), calc_distance(idx, killer_array[1], 7)));
 
+
+}
+//No Change
 function StartGame() {
     const gameGrid = document.createElement("div");
     gameGrid.classList.add("Suspect_Grid");
@@ -56,8 +72,10 @@ function StartGame() {
     document.getElementById("RedoButton").disabled = false;
     NewRound();
 }
-
+//No Change
 function NewRound() {
+    gridContainer.classList.remove('Reward_Grid');
+    gridContainer.classList.add('Suspect_Grid');
     NewGame(); //Must have gridContainer asigned first
     generateCards();
     //Update Count
@@ -84,26 +102,31 @@ fetch("./data/suspects.json")
 
 function generateCards() {
     //gridContainer.removeChild()
-    for (let step of arr) {
+    //for (let step of DisplayOrder) {
+    for (let [index, value] of DisplayOrder.entries()) {
         //3 ITEMS
         //FRONT IMAGE
         //BACK IMAGE
         //OVERALY //STart everyone as innocent
         const cardElement = document.createElement("div");
         cardElement.classList.add("card");
-        cardElement.setAttribute("id", `CardSlot${step}`)
-        cardElement.setAttribute("data-num", `${step}`);
-        cardElement.setAttribute("data-num", `${step}`);
+        cardElement.setAttribute("id", `CardSlot${index}`)
+        cardElement.setAttribute("data-num", `${index}`);
         cardElement.draggable = false
+        let icon_src = `img/Overlay/Cold_${status_array[index]}.png`;
+        if (status_array[index] == 0) {
+            icon_src = `img/Overlay/Hot_1.png`;
+        }
         cardElement.innerHTML = `
                 <div class="front">
-                  <img class="front-image" src="img/CharCards/card${step}.jpg" />
+                  <img class="front-image" src="img/CharCards/card${value}.jpg" />
                 </div>
                 <div class="back">
-                  <img class="front-image" src="img/CharCards/back${step}.jpg" />
+                  <img class="front-image" src="img/CharCards/back${value}.jpg" />
                 </div>
                 <div class="overlay">
-                    <img class="status-image hidden" id="StatusDisplay${step}" src="img/Overlay/${icon["Innocent"]}" />
+                <!--<p class="distance"></p>-->
+                    <img class="status-image hidden" id="StatusDisplay${index}" src="${icon_src}" />
                 </div>
               `;
         gridContainer.appendChild(cardElement);
@@ -113,6 +136,7 @@ function generateCards() {
     }
 
 }
+
 function fuckChar(cardContainer) {
     //Fucked and Added to Harem...
     //Flip to show Naughty Side
@@ -122,50 +146,48 @@ function fuckChar(cardContainer) {
     cardContainer.draggable = true
     // GET Index
     let Num = Number(cardContainer.dataset.num);
-    //Update Status
-    status_array[Num] = "Fucked"
-}
-
-function escapeChar(cardContainer) {
-    //Fucked and Added to Harem...
-    //Flip to show Naughty Side
-    cardContainer.classList.add('escaped');
-    //Make Inactive
-    cardContainer.classList.toggle("Inactive")
-    // GET Index
-    let Num = Number(cardContainer.dataset.num);
-    //Update Status
-    status_array[Num] = 'Innocent'
-    //Update overlay as well
+    //let displayDistance = cardContainer.querySelector(".distance");
+    //displayDistance.innerHTML = status_array[Num];
+    //displayDistance.classList.remove("hidden");
     let StatusIcon = document.getElementById(`StatusDisplay${Num}`);
+    //StatusIcon.src = `img/Overlay/Cold_${status_array[Num]}.png`; //Should Jail
+    if (status_array[Num] == 0) {
+        //"Killers.png"
+        StatusIcon.src = `img/Overlay/${icon["GameOver"]}`; //Should Jail
+    }
     StatusIcon.classList.remove('hidden');
+
+
+    Harem_count++;
+    //Total # in Jail Guilty or not
+
+
+    return status_array[Num] !== 0;
+    //Update Status-only reveal
+    //status_array[Num] 
+
+
 }
 
 function jailChar(cardContainer) {
     //Make them inactive
-    cardContainer.classList.toggle("Inactive")
+    cardContainer.classList.toggle("Inactive");
     //Reset to Default
     cardContainer.classList.remove('escaped');
     cardContainer.classList.remove('flipped');
     // GET Index
     let Num = Number(cardContainer.dataset.num);
     //Update StatusIcon to Jail and remove hidden
-    status_array[Num] = 'Arrested';
+    Jail_array.push(Num);
     let StatusIcon = document.getElementById(`StatusDisplay${Num}`);
-    StatusIcon.src = `img/Overlay/${icon[status_array[Num]]}`; //Should Jail
+    StatusIcon.src = `img/Overlay/${icon["Arrested"]}`; //Should Jail
     StatusIcon.classList.remove('hidden');
+    Jail_counter++;
 }
 
 function updateCount() {
-    //Suspect Count is the number of Suspects + Murderers
-    Suspect_count = status_array.filter(x => x === "Suspects").length + status_array.filter(x => x === "Murderer").length;
-    // # of ones you fucked Guilty or Not
-    Harem_count = status_array.filter(x => x === "Fucked").length;
-    //Total # in Jail Guilty or not
-    Jail_count = status_array.filter(x => x === "Arrested").length;
-
-    const suspect_counter = document.getElementById("count_suspects"); //+ Murderers
-    suspect_counter.textContent = Suspect_count;
+    const attemps_counter = document.getElementById("count_suspects"); //+ Murderers
+    attemps_counter.textContent = Search_count;
     const Harem_counter = document.getElementById("count_harem"); //+ Murderers
     Harem_counter.textContent = Harem_count;
     const Jail_counter = document.getElementById("count_arrested"); //+ Murderers
@@ -186,7 +208,7 @@ function winCheck() {
     let Win_Check = total_killers;
     //Iterate through killers to check their status
     for (let killer of killer_array) {
-        if (status_array[killer] == "Arrested") {
+        if (Jail_array.includes(killer)) {
             Win_Check--;
             //DIE
             let StatusIcon = document.getElementById(`StatusDisplay${killer}`);
@@ -207,24 +229,32 @@ function winCheck() {
 
     if (Win_Check == 0) {
         document.getElementById("EndButton").disabled = false;
-        alert("You Won")
+        alert("You Won- Claim your Rewards")
+        const Sophie = document.getElementById("Jail");
+        Sophie.classList.add('flipped');
 
     } else {
-        alert("You Lost")
+        alert("Killer Got Away -You Lose")
     }
 }
 
 function ClaimRewards() {
-    const Sophie = document.getElementById("Jail");
-    Sophie.classList.add('flipped');
-    const rewardContainer = document.querySelector(".Reward_Grid");
-    rewardContainer.replaceChildren()
-    generateRewardCards()
+
+    //const rewardContainer = document.querySelector(".Reward_Grid");
+    //rewardContainer.replaceChildren()
+    gridContainer.replaceChildren();//Clear all children
+    gridContainer.classList.remove('Suspect_Grid');
+    gridContainer.classList.add('Reward_Grid');
+    generateRewardCards();
 
 }
 
 function generateRewardCards() {
     const rewardContainer = document.querySelector(".Reward_Grid");
+    const header = document.createElement("div");
+    header.innerHTML = `<h2>You have ${Search_count + 7} rewards points</h2>`;
+    header.classList.add("Reward_Instructions")
+    rewardContainer.appendChild(header);
     //gridContainer.removeChild()
     for (x = 0; x < 6; x++) {
         //3 ITEMS
@@ -250,23 +280,29 @@ function generateRewardCards() {
 }
 
 function clickSlotBetter() {
-    //Check if Active
-    //Maybe use ACTIVE CLASS???
-    //classList.contains(class)
+    let Num = Number(this.dataset.num);
+    //Also Check for Max Tries
     if (this.classList.contains("Inactive")) {
         return;
     }
-    fuckChar(this);
-    // Look at data base to see Card Status..
-    //Lookup array to find 2 suspects to flip
-    let Suspects = findtag(2, "Suspects");
-
-    for (let key of Suspects) {
-        let susCard = document.getElementById(`CardSlot${key}`);
-        escapeChar(susCard);
+    if (Search_count < 1) {
+        return;
     }
-    //Update Count of each category
+    //Suspect Count is the number of Suspects + Murderers
+    Search_count--;
+
+    let safe = fuckChar(this);
     updateCount();
+    if (safe) {
+        return;
+    } else {
+        Search_count = 0;// WHOOPS CALL DIE
+        alert("You Died - Play Again?")
+    }
+
+
+
+
 
 }
 
@@ -303,6 +339,12 @@ function findtag(number, tag) {
     }
     shuffle(results);
     return results.slice(0, number)
+}
+
+function calc_distance(loc_a, loc_b, num_cols) {
+    let cols_apart = Math.abs((loc_a % num_cols) - (loc_b % num_cols));
+    let rows_apart = Math.abs(Math.floor(loc_a / num_cols) - Math.floor((loc_b / num_cols)));
+    return cols_apart + rows_apart;
 }
 
 // FROM
